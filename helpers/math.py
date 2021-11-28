@@ -3,8 +3,8 @@ import numpy as np
 # TODO Add module description + optional license
 
 
-def get_square_matrix_from_eigen(eigenvalues: list, eigenvectors: list[list], eps=1e-13) -> np.ndarray:
-    """Given set of N eigenvalues with corresponding N eigenvectors, return NxN square matrix.
+def get_diagonalizable_square_matrix_from_eigen(eigenvalues: list, eigenvectors: list[list], eps=1e-13) -> np.ndarray:
+    """Given set of N eigenvalues with corresponding N eigenvectors, return NxN diagonalizable square matrix.
     Uses decomposition of a diagonalizable matrix (https://en.wikipedia.org/wiki/Diagonalizable_matrix).
 
     :param eigenvalues: List of N eigenvalues
