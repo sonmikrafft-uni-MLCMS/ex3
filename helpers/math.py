@@ -87,8 +87,8 @@ class XDotPoly:
         """Check the stability at a given steady point.
 
         List of possibilities:
-        - positive change on the left and positive change on the right -> "instable"
-        - negative change on the left and negative change on the right -> "instable"
+        - positive change on the left and positive change on the right -> "instable (undefined)"
+        - negative change on the left and negative change on the right -> "instable (undefined)"
         - negative change on the left and positive change on the right -> "instable (repulsive)"
         - positive change on the left and negative change on the right -> "stable (attractive)"
 
@@ -103,7 +103,7 @@ class XDotPoly:
         right_val = self.evaluate(right_x)
 
         if left_val * right_val > 0:
-            return "instable"
+            return "instable (undefined)"
         if left_val < 0 and right_val > 0:
             return "instable (repulsive)"
         if left_val > 0 and right_val < 0:
