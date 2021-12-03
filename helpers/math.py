@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy.integrate import odeint
 from typing import Callable
 
 # TODO Add module description + optional license
@@ -47,6 +47,122 @@ def calc_flows(A: np.ndarray) -> tuple[tuple[np.ndarray, np.ndarray], tuple[np.n
     flow_tuple = (U, V)
 
     return mesh_tuple, flow_tuple
+
+def calc_logistic_map(r: float, x: float) -> float:
+    """Calculate logistical growth for next time stamp
+
+    :param r: growth/decay rate of the population
+    :type r: float
+    :param x: population at previous time step n
+    :type x: float
+    :return: population at previous time step n + 1 
+    :rtype: float
+    """
+    return r*x*(1-x)
+
+
+def calc_logistic_map_orbit(r: float, n_iterations: int) -> np.ndarray:
+    """Calculate the trajectory of the logistic map orbit  
+
+    :param r: growth/decay rate of the population 
+    :type r: float
+    :param n_iterations: number of iterations for which the orbit states should be calculated 
+    :type n_iterations: int
+    :return: List/Numpy array of state and timepoints of the orbit trajectory and corresponding growth rate r
+    :rtype: np.darray
+    """
+    
+    X=[]
+    x = 0.1
+
+    for i in range(n_iterations):
+        X.append(x)
+        x = calc_logistic_map(r,x)
+
+    T = np.linspace(0,100,len(X))
+    return X, T, r
+
+
+def calc_lorenz(state: np.array, t: float, sigma: float, beta:float, rho:float) -> np.ndarray:
+   """Evaluates the non-linear Lorentz equation ODEs
+
+   :param state: current state of ode solver
+   :type state: np.array
+   :param t: current time stamp of ode solver
+   :type t: float
+   :param sigma: parameter of lorentz attractor (corresponds to Prandtl-number)
+   :type sigma: float
+   :param beta: parameter of lorentz attractor
+   :type beta: float
+   :param rho: parameter of lorentz attractor (corresponds to Rayleigh-number)
+   :type rho: float
+   :return: time derivatives of the current time stamp
+   :rtype: np.ndarray
+   """
+   x, y, z  = state
+
+   x_dot = sigma*(y - x)
+   y_dot = rho*x - y - x*z
+   z_dot = x*y - beta*z
+   return x_dot, y_dot, z_dot
+
+
+def calc_lorenz_attractor(sigma: float, beta:float, rho:float, x0: np.array, T_end: int) -> np.ndarray:
+    """Calculates a trajectory of the Lorentz attractor until a fixed end point for a initial value and a given parameter set  
+
+    :param sigma: parameter of lorentz attractor (corresponds to Prandtl-number)
+    :type sigma: float
+    :param beta: parameter of lorentz attractor
+    :type beta: float
+    :param rho: parameter of lorentz attractor (corresponds to Rayleigh-number)
+    :type rho: float
+    :param x0: starting point of the trajectory 
+    :type x0: np.array
+    :param T_end: Timestamp until the trajectory should be calculated (!=number of time points in plot)
+    :type T_end: int
+    :return: matrix of all states from start till endpoint of trajectory
+    :rtype: np.ndarray
+    """
+
+    t = np.arange(0.0, T_end, 0.01)
+    states = odeint(calc_lorenz,x0, t, args=(sigma,beta,rho))
+    return states 
+
+
+def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> np.ndarray:
+    """Calculate the euclidean distance between all trajectory points 
+
+    :param x_t1: first trajectory with x,y,z states for t time points 
+    :type x_t1: np.ndarray
+    :param x_t2: second trajectory with x,y,z states for t time points 
+    :type x_t2: np.ndarray
+    :return: pointwise distance list where each entry corresponds to euclidean distance between the trajectories (t timepoints entries)
+    :rtype: np.ndarray
+    """
+
+    distance = np.zeros(x_t1.shape[0])
+    
+    for i in range(x_t1.shape[0]):
+        distance[i] = np.linalg.norm(x_t2[:,0:3][i]-x_t1[:,0:3][i])
+ 
+    T = np.linspace(0,1000,x_t1.shape[0])
+    
+    return distance, T
+
+
+def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float) -> None:
+    """Calculates the simulated time stamp where the difference between two trajectories passes a predefined threshold
+
+    :param x_t_difference: list of distance values per time stamp
+    :type x_t_difference: list
+    :param threshold: threshold which trajectory difference has to reach 
+    :type threshold: float
+    """
+    
+    idx_geq_threshold = np.where(x_t_difference>=threshold)
+    first_idx = np.amin(idx_geq_threshold)
+    t_first_geq_threshold = first_idx* (1/x_t_difference.shape[0])
+    print(f'The threshold = {threshold} was reached after {t_first_geq_threshold} simulated seconds')
 
 
 # TODO description of class
