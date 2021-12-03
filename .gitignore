@@ -1,6 +1,6 @@
 __pycache__
 
+plots/*.txt
 *.pdf
 *.png
 *.jpg
-*.txt
