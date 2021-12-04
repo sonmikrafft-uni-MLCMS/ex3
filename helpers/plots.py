@@ -31,13 +31,21 @@ def plot_eigenvalues(eigenvalues: np.ndarray, ax: Optional[Axes] = None) -> Axes
     return ax
 
 
-def plot_phase_portrait(mesh_tuple: np.ndarray, flow_tuple: np.ndarray, ax: Optional[Axes] = None) -> Axes:
+def plot_phase_portrait(
+    mesh_tuple: np.ndarray,
+    flow_tuple: np.ndarray,
+    density: Optional[float] = 1.0,
+    ax: Optional[Axes] = None,
+    **kwargs,
+) -> Axes:
     """Plot phase portrait.
 
     :param mesh_tuple: Underlying 2D mesh
     :type mesh_tuple: np.ndarray
     :param flow_tuple: 2D flow tuple
     :type flow_tuple: np.ndarray
+    :param density: Density of the points, defaults to 1.0
+    :type density: Optional[float], optional
     :param ax: Already existing Axis object to plot on, defaults to None
     :type ax: Optional, optional
     :return: Axis object with additional phase portrait
@@ -49,7 +57,7 @@ def plot_phase_portrait(mesh_tuple: np.ndarray, flow_tuple: np.ndarray, ax: Opti
     if ax is None:
         _, ax = plt.subplots(1, 1)
 
-    ax.streamplot(X1, X2, U, V, density=0.8)
+    ax.streamplot(X1, X2, U, V, density=density, **kwargs)
     ax.set_aspect("equal")
     ax.set_xlim([X1[0, 0], X1[-1, -1]])
     ax.set_ylim([X2[0, 0], X2[-1, -1]])
@@ -90,4 +98,22 @@ def plot_bifurcation(
     ax = sns.scatterplot(data=df, x="parameter", y="steady_state", hue="stability", ax=ax)
     ax.set_xlim([min(parameters), max(parameters)])
 
+    return ax
+
+
+def plot_orbit(x1: list[float], x2: list[float], ax: Optional[Axes] = None) -> None:
+    """Plot orbit of a system.
+
+    :param x1: First coordinate of the orbit
+    :type x1: list[float]
+    :param x2: Second coordinate of the orbit
+    :type x2: list[float]
+    :param ax: Already existing Axis object to plot on, defaults to None
+    :type ax: Optional[Axes], optional
+    """
+    if ax is None:
+        _, ax = plt.subplots(1, 1)
+
+    ax.plot(x1, x2, label="Orbit")
+    ax.plot(x1[0], x2[0], "ro", label="Initial point")
     return ax
