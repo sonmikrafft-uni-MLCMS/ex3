@@ -1,9 +1,11 @@
 import numpy as np
+from matplotlib import cm
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from typing import Optional
 
 # TODO Add module description + optional license
@@ -117,3 +119,41 @@ def plot_orbit(x1: list[float], x2: list[float], ax: Optional[Axes] = None) -> N
     ax.plot(x1, x2, label="Orbit")
     ax.plot(x1[0], x2[0], "ro", label="Initial point")
     return ax
+
+
+def plot_cusp(
+    x_min_max: tuple[float, float], alpha2_min_max: tuple[float, float], elev: int, azim: int
+) -> tuple[Figure, Axes]:
+    """
+    Visualizes the cusp bifurcation
+
+    :param x_min_max: tuple of lower and upper bound for the x values
+    :type x_min_max: tuple[float, float]
+    :param alpha2_min_max: tuple of lower and upper bound for the alpha values
+    :type alpha2_min_max: tuple[float, float]
+    :param elev: for rotation of the visualization (elevation of the axes), ‘elev’ stores the elevation angle in the z
+        plane
+    :type elev: int
+    :param azim: for rotation of the visualization (azimuth of the axes), ‘azim’ stores the azimuth angle in the x,y
+        plane
+    :type azim: int
+    :return: Figure and Axes object
+    :return: Figure, Axes
+    """
+    x = np.arange(*x_min_max, 0.01)
+    alpha2 = np.arange(*alpha2_min_max, 0.01)
+    X, A2 = np.meshgrid(x, alpha2)
+    A1 = X ** 3 - A2 * X
+
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(projection="3d")
+    ax.plot_surface(A1, A2, X, cmap=cm.viridis)
+    ax.set_title("Surface plot of the cusp bifurcation")
+    ax.set_xlabel(r"$\alpha_1$")
+    ax.set_ylabel(r"$\alpha_2$")
+    ax.set_zlabel(r"$x$")
+    ax.view_init(elev=elev, azim=azim)
+    plt.tight_layout()
+    plt.show()
+
+    return fig, ax
