@@ -73,7 +73,7 @@ def calc_logistic_map_orbit(r: float, n_iterations: int) -> np.ndarray:
     """
     
     X=[]
-    x = 0.1
+    x = 0.5
 
     for i in range(n_iterations):
         X.append(x)

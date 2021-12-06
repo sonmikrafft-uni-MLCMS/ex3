@@ -131,7 +131,8 @@ def plot_logistic_map_bifurcation(r_min: float, r_max: float, x_initial: float, 
     ax.set_xlim(r_min, r_max)
     ax.set_ylim(0, 1)
     ax.plot(r_values, x_values,',b', alpha=0.5)
-
+    ax.plot(r_values, x_values,',b', alpha=0.5)
+    plt.savefig("T:\Master_RCI\Semester_03\IN2106_MLCMS\Exc_3\images\logistic_map.pdf")
 
 def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: np.array) -> None:
     """ Plot the trajectories of multiple logistic map orbits into one plot
@@ -146,7 +147,7 @@ def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: np.array
     ax = plt.axes()
 
     ax.set_title(f"Orbit for $x_{{n + 1}} = rx_{{n}}(1 - x_{{n}})$ for  $n_{{iterations}}=${100}", fontsize=16)
-    ax.set_xlabel('timestep t', fontsize=24)
+    ax.set_xlabel('generation n', fontsize=24)
     ax.set_ylabel('$x_{n}$', fontsize=24)
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 1)
@@ -156,6 +157,30 @@ def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: np.array
 
     ax.legend()
 
+
+def plot_logistic_map(r_values: list) -> None:
+    """Plot logistic map parabola over different growth rate r values
+
+    :param r_values: list of growth rate r values 
+    :type r_values: list
+    """
+    print(r_values[0])
+    x = np.linspace(0, 1)
+    y = x
+
+    fig = plt.figure(figsize=(15, 10))
+    ax = plt.axes()
+
+    ax.set_title(f"Logistic Map over growth rate r", fontsize=16)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    
+    for i in range(len(r_values)):
+        ax.plot(x, calc_logistic_map(r_values[i],x), label=r_values[i])
+    
+    ax.plot(x, y, '-k', label="y=x")
+    ax.legend()
+    
 
 def plot_lorenz_attractor(states: np.ndarray, sigma: float, beta: float, rho: float, x0: np.array, T_end: int) -> None:
     """Plots the trajectory of the Lorentz attractor in a 3D Plot 
@@ -180,13 +205,21 @@ def plot_lorenz_attractor(states: np.ndarray, sigma: float, beta: float, rho: fl
     rho = round(rho, 3)
     
     ax = plt.figure(figsize=(20, 15)).add_subplot(projection='3d')
-    ax.plot(states[:, 0], states[:, 1], states[:, 2], linewidth=0.7)
+    ax.plot(states[:, 0], states[:, 1], states[:, 2], linewidth=0.15, label="Trajectory")
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
     ax.set_title(f"Lorentz Attractor \n $\sigma$={sigma}, " + r'$\beta$'+ f"={beta}," + r'$\rho$'+ f"={rho}\n $X_{{0}}$={x0} $T_{{end}}$={T_end}", fontsize=16)
+    ax.plot(x0[0],x0[1],x0[2], 'ro', label='Initial Point')
+    ax.plot(states[:, 0][-1], states[:, 1][-1], states[:, 2][-1], 'ko', label='End Point')
+    legend = ax.legend()
+    for line in legend.get_lines():
+        line.set_linewidth(2.0)
+    
+    
     plt.show()
-
+    
+    
 def plot_trajectory_difference(x_t_difference: list, T: np.array) -> None:
     """Plots the distance of two trajectories over time 
 
