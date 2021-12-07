@@ -1,1 +1,8 @@
 __pycache__
+
+.vscode
+
+plots/*.txt
+*.pdf
+*.png
+*.jpg
