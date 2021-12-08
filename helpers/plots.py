@@ -3,7 +3,9 @@ from matplotlib import cm
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+
 from helpers.math import calc_logistic_map
+
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from typing import Optional
