@@ -1,6 +1,3 @@
-# TODO add module docstring + copyright notice (optional) + reference to paper [5]
-
-
 def mu(b: float, I: float, mu0: float, mu1: float) -> float:
     """Calculate the per capita recovery rate of infectious individuals.
 
@@ -49,7 +46,7 @@ def h(
 ) -> float:
     """Indicator function for bifurcations.
 
-    TODO find out what this is about and add descriptive title + return description.
+    computes value of indicator function h(I) for a given SIR model and value I
 
     :param I: number of infective persons
     :type I: float
@@ -67,7 +64,7 @@ def h(
     :type nu: float
     :param b: number of available beds per 10k persons
     :type b: float
-    :return: TODO
+    :return: value for indicator function h(I)
     :rtype: float
     """
     c0 = b ** 2 * d * A
