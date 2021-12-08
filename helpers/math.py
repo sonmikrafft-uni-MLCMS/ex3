@@ -61,7 +61,7 @@ def calc_logistic_map(r: float, x: float) -> float:
     return r*x*(1-x)
 
 
-def calc_logistic_map_orbit(r: float, n_iterations: int) -> List:
+def calc_logistic_map_orbit(r: float, n_iterations: int) -> tuple[list, np.ndarray, float]:
     """Calculate the trajectory of the logistic map orbit  
 
     :param r: growth/decay rate of the population 
@@ -69,13 +69,13 @@ def calc_logistic_map_orbit(r: float, n_iterations: int) -> List:
     :param n_iterations: number of iterations for which the orbit states should be calculated 
     :type n_iterations: int
     :return: List/Numpy array of state and timepoints of the orbit trajectory and corresponding growth rate r
-    :rtype: np.darray
+    :rtype: tuple[list, np.ndarray, float]
     """
     
     X=[]
     x = 0.5
 
-    for i in range(n_iterations):
+    for _ in range(n_iterations):
         X.append(x)
         x = calc_logistic_map(r,x)
 
@@ -83,7 +83,7 @@ def calc_logistic_map_orbit(r: float, n_iterations: int) -> List:
     return X, T, r
 
 
-def calc_lorenz(state: np.ndarray, t: float, sigma: float, beta:float, rho:float) -> np.ndarray:
+def calc_lorenz(state: np.ndarray, t: float, sigma: float, beta:float, rho:float) -> tuple[float, float, float]:
    """Evaluates the non-linear Lorentz equation ODEs
 
    :param state: current state of ode solver
@@ -97,7 +97,7 @@ def calc_lorenz(state: np.ndarray, t: float, sigma: float, beta:float, rho:float
    :param rho: parameter of lorentz attractor (corresponds to Rayleigh-number)
    :type rho: float
    :return: time derivatives of the current time stamp
-   :rtype: np.ndarray
+   :rtype: tuple[float, float, float]
    """
    x, y, z  = state
 
@@ -129,7 +129,7 @@ def calc_lorenz_attractor(sigma: float, beta:float, rho:float, x0: np.ndarray, T
     return states 
 
 
-def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> np.ndarray:
+def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Calculate the euclidean distance between all trajectory points 
 
     :param x_t1: first trajectory with x,y,z states for t time points 
@@ -137,7 +137,7 @@ def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> np.ndarray
     :param x_t2: second trajectory with x,y,z states for t time points 
     :type x_t2: np.ndarray
     :return: pointwise distance list where each entry corresponds to euclidean distance between the trajectories (t timepoints entries)
-    :rtype: np.ndarray
+    :rtype: tuple[np.ndarray, np.ndarray]
     """
 
     distance = np.zeros(x_t1.shape[0])
@@ -148,11 +148,11 @@ def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> np.ndarray
     return distance, T
 
 
-def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float, T_end: float) -> None:
+def calc_trajectory_passing_threshold(x_t_difference: np.ndarray, threshold: float, T_end: float) -> None:
     """Calculates the simulated time stamp where the difference between two trajectories passes a predefined threshold
 
     :param x_t_difference: list of distance values per time stamp
-    :type x_t_difference: list
+    :type x_t_difference: np.ndarray
     :param threshold: threshold which trajectory difference has to reach 
     :type threshold: float
     :param T_end: corresponds to simulated time ans is used to iteration counter into simulated seconds

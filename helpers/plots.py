@@ -153,7 +153,7 @@ def plot_logistic_map_bifurcation(
     ax.legend()
 
 
-def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: np.array) -> None:
+def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: list[np.ndarray]) -> None:
     """Plot the trajectories of multiple logistic map orbits into one plot
 
     :param time_stamps: List of timestamps at which the orbits are visualized
@@ -197,14 +197,14 @@ def plot_logistic_map(r_values: list) -> None:
     ax.set_ylabel("$x_{n+1}$", fontsize=24)
 
     for i in range(len(r_values)):
-        ax.plot(x, calc_logistic_map(r_values[i], x), label=f"r = {r_values[i]}")
+        ax.plot(x, calc_logistic_map(r_values[i], x), label=f"r = {r_values[i]}") # type: ignore
 
     ax.legend()
     ax.plot(x, y, "-k", label="y=x")
 
 
 def plot_lorenz_attractor(
-    states: np.ndarray, sigma: float, beta: float, rho: float, x0: np.array, T_end: int, line_width: float
+    states: np.ndarray, sigma: float, beta: float, rho: float, x0: np.ndarray, T_end: int, line_width: float
 ) -> None:
     """Plots the trajectory of the Lorentz attractor in a 3D Plot
 
@@ -218,7 +218,7 @@ def plot_lorenz_attractor(
     :param rho: parameter of lorentz attractor (corresponds to Rayleigh-number)
     :type rho: float
     :param x0: starting point of the trajectory
-    :type x0: np.array
+    :type x0: np.ndarray
     :param T_end: Timestamp until the trajectory should be plotted (!=number of time points in plot)
     :type T_end: int
     :param line_width: float to controll the line width of the trajectory
@@ -278,7 +278,7 @@ def plot_lorenz_orbit(states: np.ndarray, sigma: float, beta: float, rho: float,
     plt.show()
 
 
-def plot_trajectory_difference(x_t_difference: list, T: np.array) -> None:
+def plot_trajectory_difference(x_t_difference: list, T: np.ndarray) -> None:
     """Plots the distance of two trajectories over time
 
     :param x_t_difference: list of distance values per time stamp
