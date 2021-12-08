@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint
-from typing import Callable, List
+from typing import Callable
 
 # TODO Add module description + optional license
 
