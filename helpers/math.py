@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint
-from typing import Callable
+from typing import Callable, List
 
 # TODO Add module description + optional license
 
@@ -61,7 +61,7 @@ def calc_logistic_map(r: float, x: float) -> float:
     return r*x*(1-x)
 
 
-def calc_logistic_map_orbit(r: float, n_iterations: int) -> np.ndarray:
+def calc_logistic_map_orbit(r: float, n_iterations: int) -> List:
     """Calculate the trajectory of the logistic map orbit  
 
     :param r: growth/decay rate of the population 
@@ -83,7 +83,7 @@ def calc_logistic_map_orbit(r: float, n_iterations: int) -> np.ndarray:
     return X, T, r
 
 
-def calc_lorenz(state: np.array, t: float, sigma: float, beta:float, rho:float) -> np.ndarray:
+def calc_lorenz(state: np.ndarray, t: float, sigma: float, beta:float, rho:float) -> np.ndarray:
    """Evaluates the non-linear Lorentz equation ODEs
 
    :param state: current state of ode solver
@@ -107,7 +107,7 @@ def calc_lorenz(state: np.array, t: float, sigma: float, beta:float, rho:float) 
    return x_dot, y_dot, z_dot
 
 
-def calc_lorenz_attractor(sigma: float, beta:float, rho:float, x0: np.array, T_end: int) -> np.ndarray:
+def calc_lorenz_attractor(sigma: float, beta:float, rho:float, x0: np.ndarray, T_end: int) -> np.ndarray:
     """Calculates a trajectory of the Lorentz attractor until a fixed end point for a initial value and a given parameter set  
 
     :param sigma: parameter of lorentz attractor (corresponds to Prandtl-number)
@@ -168,7 +168,7 @@ def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float, T_
     
     #raised for zero length (=threshold never passed)
     except ValueError:
-        print(f'The threshold = {threshold} was never reached in $T={T_end}')  
+        print(f'The threshold = {threshold} was never reached in T={T_end}')  
 
 
 # TODO description of class
