@@ -171,7 +171,7 @@ def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float, T_
         print(f'The threshold = {threshold} was never reached in T={T_end}')  
 
 
-# TODO description of class
+# Class for generic polynomial evaluation function.
 class XDotPoly:
     def __init__(self, polynomial: np.ndarray):
         """Initialize a 1D DGL polynomial in the state x.
@@ -209,8 +209,8 @@ class XDotPoly:
         """Check the stability at a given steady point.
 
         List of possibilities:
-        - positive change on the left and positive change on the right -> "instable"
-        - negative change on the left and negative change on the right -> "instable"
+        - positive change on the left and positive change on the right -> "instable (undefined)"
+        - negative change on the left and negative change on the right -> "instable (undefined)"
         - negative change on the left and positive change on the right -> "instable (repulsive)"
         - positive change on the left and negative change on the right -> "stable (attractive)"
 
@@ -225,7 +225,7 @@ class XDotPoly:
         right_val = self.evaluate(right_x)
 
         if left_val * right_val > 0:
-            return "instable"
+            return "instable (undefined)"
         if left_val < 0 and right_val > 0:
             return "instable (repulsive)"
         if left_val > 0 and right_val < 0:
@@ -274,3 +274,40 @@ class XDotPoly:
                 stability.append(p.check_stability(steady_state))
 
         return (params, steady_states, stability)
+
+
+# Class for Andronov-Hopf bifurcation analysis of a 2D DGL.
+class AndronovHopf:
+    @staticmethod
+    def calc_flows(y: tuple[float, float], alpha: float) -> tuple[float, float]:
+        """Calculate the flow field for the Andronov-Hopf equation.
+
+        :param y: State tuple (x0, x1)
+        :type mesh_tuple: tuple[float, float]
+        :param alpha: parameter alpha value
+        :type alpha: float
+        :return: Tuple of resulting partial derivatives (dx1, dx2)
+        :rtype: tuple[float, float]
+        """
+        x1, x2 = y
+        dx1 = alpha * x1 - x2 - x1 * (x1 ** 2 + x2 ** 2)
+        dx2 = x1 + alpha * x2 - x2 * (x1 ** 2 + x2 ** 2)
+        return dx1, dx2
+
+    @staticmethod
+    def solve(t: np.ndarray, y0: tuple[float, float], alpha: float) -> tuple[np.ndarray, np.ndarray]:
+        """Solve the DGL for the given initial conditions and parameter alpha.
+
+        :param t: time vector for which to calculate the solution
+        :type t: np.ndarray
+        :param y0: initial condition (x0, x1)
+        :type y0: tuple[float, float]
+        :param alpha: parameter alpha value
+        :type alpha: float
+        :return: tuple of states (x1, x2) that are the solution of the DGL
+        :rtype: tuple[np.ndarray, np.ndarray]
+        """
+        deriv = lambda y, t, alpha: AndronovHopf.calc_flows(y, alpha)
+        ret = odeint(deriv, y0, t, args=(alpha,))
+        x1, x2 = ret.T
+        return x1, x2
