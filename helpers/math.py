@@ -141,28 +141,34 @@ def calc_trajectory_difference(x_t1: np.ndarray, x_t2: np.ndarray) -> np.ndarray
     """
 
     distance = np.zeros(x_t1.shape[0])
-    
-    for i in range(x_t1.shape[0]):
-        distance[i] = np.linalg.norm(x_t2[:,0:3][i]-x_t1[:,0:3][i])
- 
+    distance = np.linalg.norm(x_t1-x_t2, ord=2, axis=1)
+
     T = np.linspace(0,1000,x_t1.shape[0])
     
     return distance, T
 
 
-def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float) -> None:
+def calc_trajectory_passing_threshold(x_t_difference: list, threshold: float, T_end: float) -> None:
     """Calculates the simulated time stamp where the difference between two trajectories passes a predefined threshold
 
     :param x_t_difference: list of distance values per time stamp
     :type x_t_difference: list
     :param threshold: threshold which trajectory difference has to reach 
     :type threshold: float
+    :param T_end: corresponds to simulated time ans is used to iteration counter into simulated seconds
+    :type threshold: float
     """
     
     idx_geq_threshold = np.where(x_t_difference>=threshold)
-    first_idx = np.amin(idx_geq_threshold)
-    t_first_geq_threshold = first_idx* (1/x_t_difference.shape[0])
-    print(f'The threshold = {threshold} was reached after {t_first_geq_threshold} simulated seconds')
+
+    try:  
+        first_idx = np.amin(idx_geq_threshold)
+        t_first_geq_threshold = first_idx*T_end*(1/x_t_difference.shape[0])
+        print(f'The threshold = {threshold} was reached after {t_first_geq_threshold} simulated seconds (or in iteration step n={first_idx})')
+    
+    #raised for zero length (=threshold never passed)
+    except ValueError:
+        print(f'The threshold = {threshold} was never reached in $T={T_end}')  
 
 
 # TODO description of class
