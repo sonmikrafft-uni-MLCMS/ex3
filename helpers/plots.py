@@ -10,7 +10,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from typing import Optional
 
-# TODO Add module description + optional license
+# module as a collection of functions for various plots
 
 
 def plot_eigenvalues(eigenvalues: np.ndarray, ax: Optional[Axes] = None) -> Axes:
@@ -199,7 +199,7 @@ def plot_logistic_map(r_values: list) -> None:
     ax.set_ylabel("$x_{n+1}$", fontsize=24)
 
     for i in range(len(r_values)):
-        ax.plot(x, calc_logistic_map(r_values[i], x), label=f"r = {r_values[i]}") # type: ignore
+        ax.plot(x, calc_logistic_map(r_values[i], x), label=f"r = {r_values[i]}")  # type: ignore
 
     ax.legend()
     ax.plot(x, y, "-k", label="y=x")

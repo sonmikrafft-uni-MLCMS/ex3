@@ -1,3 +1,6 @@
+# module implementing the SIR model
+
+
 def mu(b: float, I: float, mu0: float, mu1: float) -> float:
     """Calculate the per capita recovery rate of infectious individuals.
 
