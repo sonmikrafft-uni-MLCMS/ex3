@@ -172,7 +172,7 @@ def plot_logistic_map_orbit(time_stamps: list, r_values: list, *states: np.array
     ax.set_ylim(0, 1)
 
     for i, state in enumerate(states):
-        ax.plot(time_stamps, state, label=r_values[i])
+        ax.plot(time_stamps, state, label=f"r = {r_values[i]}")
 
     ax.legend()
 
@@ -197,7 +197,7 @@ def plot_logistic_map(r_values: list) -> None:
     ax.set_ylabel("$x_{n+1}$", fontsize=24)
 
     for i in range(len(r_values)):
-        ax.plot(x, calc_logistic_map(r_values[i], x), label=r_values[i])
+        ax.plot(x, calc_logistic_map(r_values[i], x), label=f"r = {r_values[i]}")
 
     ax.legend()
     ax.plot(x, y, "-k", label="y=x")
