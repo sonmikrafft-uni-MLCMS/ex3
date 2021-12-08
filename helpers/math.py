@@ -185,7 +185,7 @@ class XDotPoly:
             p[0] * x**n + p[1] * x**(n-1) + ... + p[n-1]*x + p[n]
         :type polynomial: np.ndarray
         """
-        self.polynomial = polynomialF
+        self.polynomial = polynomial
         self.degree = len(polynomial) - 1
 
     def get_steady_states(self) -> list:
